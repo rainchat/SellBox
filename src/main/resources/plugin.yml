@@ -1,0 +1,8 @@
+name: SellBox
+version: ${project.version}
+main: com.rainchat.sellbox.SellBox
+api-version: 1.17
+authors: [ rain_chat ]
+depends: [Vault]
+soft-depends: [Essentials]
+description: easy sell your stuff

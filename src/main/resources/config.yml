@@ -1,0 +1,17 @@
+messages:
+  break-chest: "&7[&aSellBox&7] you broke your &cSellBox"
+  break-chest-err: "&7[&aSellBox&7] You cannot break someone else's chest"
+  place-chest: "&7[&aSellBox&7] you have &asuccessfully &7set the chest for sale"
+  place-chest-err: "&7[&aSellBox&7] you already have a &aSellBox"
+  message-sold: "&7[&aSellBox&7] Sold all items for &c%total%&a!"
+  item-enumeration-format: "%amount%x &c%material%&r = &a %price%"
+  chest-stats:
+    - "&7[&aSellBox&7] cost of the chest &c%total%&a!"
+    - "&7The chest is at coordinates:"
+    - "&c%cords%"
+Chest-item:
+  name: "&eStardewValley sellbox"
+  lore:
+    - "&7Place a chest and"
+    - "&7items from it will "
+    - "&7be sold every day "
