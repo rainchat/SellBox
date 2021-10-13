@@ -1,3 +1,8 @@
+# A world against which time will be checked
+world: world
+# Time at which things will be sold
+time: 6000
+
 messages:
   break-chest: "&7[&aSellBox&7] you broke your &cSellBox"
   break-chest-err: "&7[&aSellBox&7] You cannot break someone else's chest"
@@ -5,6 +10,7 @@ messages:
   place-chest-err: "&7[&aSellBox&7] you already have a &aSellBox"
   message-sold: "&7[&aSellBox&7] Sold all items for &c%total%&a!"
   item-enumeration-format: "%amount%x &c%material%&r = &a %price%"
+  no-chest: "&7[&aSellBox&7] you don't have a &cSellBox"
   chest-stats:
     - "&7[&aSellBox&7] cost of the chest &c%total%&a!"
     - "&7The chest is at coordinates:"

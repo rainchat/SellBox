@@ -28,7 +28,10 @@ public class PlayerCommands extends CommandBase {
     @Default
     @Permission("sellbox.command.stats")
     public void onDefault(Player player) {
-        if (sellManager.getSellChest(player) == null) return;
+        if (sellManager.getSellChest(player) == null) {
+            player.sendMessage(plugin.getConfig().getString("messages.no-chest").replace('&', '§'));
+            return;
+        }
 
         PlayerSellChest playerSellChest = sellManager.getSellChest(player);
 
@@ -68,6 +71,10 @@ public class PlayerCommands extends CommandBase {
     @SubCommand("removeChest")
     @Permission("sellbox.command.removechest")
     public void onRemove(Player player) {
+        if (sellManager.getSellChest(player) == null) {
+            player.sendMessage(plugin.getConfig().getString("messages.no-chest").replace('&', '§'));
+            return;
+        }
 
         sellManager.remove(player);
 

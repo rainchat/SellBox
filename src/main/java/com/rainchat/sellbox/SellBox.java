@@ -48,6 +48,8 @@ public class SellBox extends JavaPlugin {
 	 */
 	private Gson gson = new Gson();
 
+	private SellManager sellManager;
+
 	@Override
 	public void onEnable() {
 		setupEconomy();
@@ -57,7 +59,7 @@ public class SellBox extends JavaPlugin {
 
 		ChestItem chestItem = new ChestItem(this);
 
-		SellManager sellManager = new SellManager(this);
+		sellManager = new SellManager(this);
 		sellManager.load(new TypeToken<Set<PlayerSellChest>>(){}.getType());
 
 		CommandManager commandManager = new CommandManager(this);
@@ -69,7 +71,7 @@ public class SellBox extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-
+		sellManager.unload();
 	}
 
 	public List<String> getCustomItemDescription(CustomItem item, int amount){

@@ -78,7 +78,7 @@ public class ChestCheck implements Listener {
         if (block.getType().name().contains("CHEST") && sellManager.getSellChest(block.getLocation()) != null) {
             PlayerSellChest playerSellChest = sellManager.getSellChest(player);
 
-            if (playerSellChest.equals(sellManager.getSellChest(block.getLocation()))) {
+            if (sellManager.getSellChest(block.getLocation()).equals(playerSellChest)) {
                 sellManager.remove(player);
                 player.sendMessage(plugin.getConfig().getString("messages.break-chest").replace('&', '§'));
             } else {

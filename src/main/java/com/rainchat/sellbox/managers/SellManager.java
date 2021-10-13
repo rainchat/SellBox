@@ -26,7 +26,7 @@ public class SellManager extends Manager<PlayerSellChest> {
 
     public PlayerSellChest getSellChest(Player player) {
         for (PlayerSellChest playerSellChest : toSet()) {
-            if (playerSellChest.getOwner() == player.getUniqueId()) return playerSellChest;
+            if (playerSellChest.getOwner().equals(player.getUniqueId())) return playerSellChest;
         }
         return null;
     }
@@ -37,7 +37,7 @@ public class SellManager extends Manager<PlayerSellChest> {
 
     public void remove(Player player) {
         for (PlayerSellChest playerSellChest : toSet()) {
-            if (playerSellChest.getOwner() == player.getUniqueId()) {
+            if (playerSellChest.getOwner().equals(player.getUniqueId())) {
                 remove(playerSellChest);
                 return;
             }
