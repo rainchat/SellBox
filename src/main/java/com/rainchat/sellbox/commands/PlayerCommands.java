@@ -2,16 +2,22 @@ package com.rainchat.sellbox.commands;
 
 import com.rainchat.sellbox.SellBox;
 import com.rainchat.sellbox.data.PlayerSellChest;
+import com.rainchat.sellbox.data.TimeSaver;
+import com.rainchat.sellbox.listeners.TimeListener;
 import com.rainchat.sellbox.managers.SellManager;
 import com.rainchat.sellbox.utils.ChestItem;
 import com.rainchat.sellbox.utils.Item;
 import me.mattstudios.mf.annotations.*;
 import me.mattstudios.mf.base.CommandBase;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.time.LocalTime;
+import java.util.Map;
 
 @Command("StardewValley")
 @Alias({"sv", "sellbox"})
@@ -24,6 +30,8 @@ public class PlayerCommands extends CommandBase {
         this.sellManager = sellManager;
         this.plugin = plugin;
     }
+
+
 
     @Default
     @Permission("sellbox.command.stats")
@@ -67,6 +75,26 @@ public class PlayerCommands extends CommandBase {
 
 
 
+    @SubCommand("timer")
+    @Permission("sellbox.command.timer")
+    public void onTimer(Player player) {
+
+        int i = 0;
+        for (Map.Entry<String, TimeSaver> timer: TimeListener.getTimers().entrySet()) {
+            i++;
+            String[] replace = timer.getKey().split(":");
+            String text = plugin.getConfig().getString("messages.sell-timer");
+
+            text = text.replace('&', '§');
+            text = text.replace("%arg_1%", String.valueOf(i));
+            text = text.replace("%arg_2%", LocalTime.ofSecondOfDay(timer.getValue().getHours()*60*60+timer.getValue().getMinutes()*60).toString());
+            text = text.replace("%hours%", replace[0]);
+            text = text.replace("%minutes%", replace[1]);
+
+            player.sendMessage(text);
+        }
+
+    }
 
     @SubCommand("removeChest")
     @Permission("sellbox.command.removechest")

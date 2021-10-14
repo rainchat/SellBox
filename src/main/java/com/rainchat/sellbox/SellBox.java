@@ -7,14 +7,19 @@ import com.rainchat.sellbox.commands.PlayerCommands;
 import com.rainchat.sellbox.commands.StorageCommand;
 import com.rainchat.sellbox.customitem.CustomItem;
 import com.rainchat.sellbox.data.PlayerSellChest;
+import com.rainchat.sellbox.data.TimeSaver;
 import com.rainchat.sellbox.listeners.ChestCheck;
+import com.rainchat.sellbox.listeners.TimeListener;
 import com.rainchat.sellbox.managers.SellManager;
 import com.rainchat.sellbox.utils.ChestItem;
+import com.rainchat.sellbox.utils.ServerLog;
 import com.rainchat.sellbox.utils.Utils;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.economy.Economy;
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -23,7 +28,10 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class SellBox extends JavaPlugin {
@@ -52,7 +60,14 @@ public class SellBox extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		setupEconomy();
+		new ServerLog(this);
+		if (!setupEconomy()) {
+			ServerLog.error("No economy plugin found, plugin turns off!");
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+		} else {
+			ServerLog.info("Successfully hooked into Economy vault.");
+		}
 		
 		this.saveDefaultConfig();
 		this.loadItems();
@@ -66,12 +81,15 @@ public class SellBox extends JavaPlugin {
 		commandManager.register(new StorageCommand(this), new PlayerCommands(sellManager,this));
 
 		this.getServer().getPluginManager().registerEvents(new ChestCheck(this, sellManager), this);
+		new TimeListener(this,sellManager);
 
 	}
 	
 	@Override
 	public void onDisable() {
-		sellManager.unload();
+		if (sellManager != null) {
+			sellManager.unload();
+		}
 	}
 
 	public List<String> getCustomItemDescription(CustomItem item, int amount){
@@ -179,7 +197,7 @@ public class SellBox extends JavaPlugin {
 		return customItems;
 	}
 
-	boolean setupEconomy() {
+	public boolean setupEconomy() {
 		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
 				.getRegistration(net.milkbowl.vault.economy.Economy.class);
 		if (economyProvider != null) {

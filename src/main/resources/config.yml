@@ -1,7 +1,11 @@
 # A world against which time will be checked
 world: world
-# Time at which things will be sold
-time: 6000
+# Time at which things will be sold (realTime or minecraft)
+timeType: realTime
+
+time:
+  - "12:00"
+  - "18:00"
 
 messages:
   break-chest: "&7[&aSellBox&7] you broke your &cSellBox"
@@ -15,6 +19,8 @@ messages:
     - "&7[&aSellBox&7] cost of the chest &c%total%&a!"
     - "&7The chest is at coordinates:"
     - "&c%cords%"
+  sell-timer: "&e%arg_1%&7. &a%arg_2% &7(time until next sale &c%hours% &7hours &c%minutes% &7minutes)"
+
 Chest-item:
   name: "&eStardewValley sellbox"
   lore:

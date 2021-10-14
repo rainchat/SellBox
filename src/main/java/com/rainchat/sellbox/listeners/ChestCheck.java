@@ -21,34 +21,11 @@ public class ChestCheck implements Listener {
 
     private final SellBox plugin;
     private final SellManager sellManager;
-    private int thisDay;
-    private long time;
-    private World world;
+
 
     public ChestCheck(SellBox plugin, SellManager sellManager) {
         this.plugin = plugin;
         this.sellManager = sellManager;
-        this.thisDay = (int) (Bukkit.getWorld("world").getFullTime()/24000);
-
-        time = plugin.getConfig().getLong("time", 6000);
-        world = Bukkit.getWorld(plugin.getConfig().getString("world","world"));
-
-
-        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
-
-            int x = (int) (world.getFullTime()/24000);
-            if (thisDay < x && world.getTime() <= time ) {
-                thisDay = x;
-                for (PlayerSellChest playerSellChest: sellManager.getAllChests()) {
-                    Player player = Bukkit.getPlayer(playerSellChest.getOwner());
-                    if (player == null) return;
-                    if (!player.isOnline()) return;
-                    sellDrop(playerSellChest, player);
-                }
-            }
-
-
-        }, 20L, 20L);
     }
 
     @EventHandler
@@ -105,34 +82,5 @@ public class ChestCheck implements Listener {
         }
 
     }
-
-    public void sellDrop(PlayerSellChest playerSellChest, Player player) {
-        Block block = playerSellChest.getChestLocation().toLocation(plugin).getBlock();
-
-        if (block.getType().name().contains("CHEST")) {
-            Chest chest = (Chest) block.getState();
-            ItemStack[] inventory = chest.getInventory().getContents();
-            double total = plugin.calcWorthOfContent(chest.getInventory().getContents());
-
-            if (total <= 0) {
-                return;
-            }
-
-            for (int a = 0; a < inventory.length; ++a) {
-                ItemStack item = inventory[a];
-
-                if (plugin.isSalable(item)) {
-                    chest.getInventory().setItem(a, new ItemStack(Material.AIR));
-                }
-            }
-
-
-
-            plugin.getEconomy().depositPlayer(player, total);
-
-            player.sendMessage(plugin.getConfig().getString("messages.message-sold").replace('&', '§').replace("%total%", plugin.getEconomy().format(total)));
-        }
-    }
-
 }
 
